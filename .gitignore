@@ -1,0 +1,7 @@
+# Ignore live environment variables
+.env
+
+# Ignore Pi-hole local database and configurations
+etc-pihole/
+etc-dnsmasq.d/
+

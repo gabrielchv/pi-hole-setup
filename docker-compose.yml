@@ -1,0 +1,28 @@
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "80:80/tcp"
+    environment:
+      TZ: '${TZ}'
+      WEBPASSWORD: '${WEBPASSWORD}'
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    volumes:
+      - './etc-pihole:/etc/pihole'
+      - './etc-dnsmasq.d:/etc/dnsmasq.d'
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "dig", "+short", "+norecurse", "-p", "53", "@127.0.0.1", "pi.hole"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
