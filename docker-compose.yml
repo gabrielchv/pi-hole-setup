@@ -15,12 +15,7 @@ services:
     volumes:
       - './etc-pihole:/etc/pihole'
       - './etc-dnsmasq.d:/etc/dnsmasq.d'
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "dig", "+short", "+norecurse", "-p", "53", "@127.0.0.1", "pi.hole"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    restart: always
     logging:
       driver: "json-file"
       options:
