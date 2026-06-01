@@ -6,15 +6,22 @@ services:
       - "53:53/tcp"
       - "53:53/udp"
       - "80:80/tcp"
+      - "443:443/tcp"
+      - "67:67/udp" # DHCP server port enabled by default
     environment:
       TZ: '${TZ}'
-      WEBPASSWORD: '${WEBPASSWORD}'
+      # Modern Pi-hole v6 password token variable
+      FTLCONF_webserver_api_password: '${WEBPASSWORD}'
+      # Hardcodes the interface listening mode to avoid Docker network drops
+      FTLCONF_dns_listeningMode: 'ALL'
     dns:
       - 127.0.0.1
       - 1.1.1.1
     volumes:
       - './etc-pihole:/etc/pihole'
-      - './etc-dnsmasq.d:/etc/dnsmasq.d'
+    cap_add:
+      - NET_ADMIN # Crucial for DHCP lease broadcasting
+      - SYS_NICE  # Gives FTL processing priority control
     restart: always
     logging:
       driver: "json-file"
