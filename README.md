@@ -73,3 +73,22 @@ docker compose up -d
 ```
 
 Pi-hole data lives in `etc-pihole/` and `etc-dnsmasq.d/` (bind-mounted), so updates keep your configuration and query history intact.
+
+## 5. Troubleshooting
+
+**Port 53 already in use** — another local resolver (`systemd-resolved`) holds it:
+
+```bash
+sudo systemctl disable --now systemd-resolved
+```
+
+The install script points `/etc/resolv.conf` at `1.1.1.1`; re-run it if the file was regenerated.
+
+**Admin panel unreachable** — check the container is up and healthy:
+
+```bash
+docker compose ps
+docker compose logs --tail=50
+```
+
+**Ads still getting through** — confirm clients actually use the Pi as their DNS (`nslookup doubleclick.net <PI_IP>`), then revisit the IPv6 warning in [Router Configuration](#3-router-configuration).
