@@ -8,6 +8,14 @@ This repository provides a fully automated, production-grade installation of Pi-
 2. **Enable SSH**: In the Pi Imager OS Customization settings, enable SSH and configure your Wi-Fi and user credentials. 
    > *Tip: You can also enable SSH manually by placing an empty file exactly named `ssh` in the root of the `bootfs` partition on the SD card right after flashing.*
 
+3. **Set a static IP**: give the Pi a fixed address so its DNS role survives reboots. Edit `/etc/dhcpcd.conf` and add (adjust the interface, address and router to match your network):
+    ```conf
+    interface eth0
+    static ip_address=192.168.1.50/24
+    static routers=192.168.1.1
+    static domain_name_servers=1.1.1.1
+    ```
+
 ## 2. Installation
 
 SSH into your Raspberry Pi and run the following commands:
