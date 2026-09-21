@@ -61,3 +61,15 @@ To enable network-wide ad blocking, you must route your network's DNS traffic th
 4. Leave the Secondary DNS completely blank.
 5. **IPv6 Warning:** If your router utilizes IPv6, you must disable IPv6 Stateless DNS broadcasting (SLAAC) or point the IPv6 DNS to the Pi-hole as well, otherwise devices (like Android and Pop!_OS) will bypass the ad blocker.
 6. Save your settings and disconnect/reconnect your devices to the Wi-Fi to refresh their network rules.
+## 4. Updating Pi-hole
+
+Pull the latest image and recreate the container:
+
+```bash
+cd pi-hole-setup
+git pull
+docker compose pull
+docker compose up -d
+```
+
+Pi-hole data lives in `etc-pihole/` and `etc-dnsmasq.d/` (bind-mounted), so updates keep your configuration and query history intact.
