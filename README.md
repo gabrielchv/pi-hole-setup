@@ -2,6 +2,16 @@
 
 This repository provides a fully automated, production-grade installation of Pi-hole via Docker for a fresh Raspberry Pi OS. 
 
+## Repository files
+
+| File | Purpose |
+| --- | --- |
+| `install_pi-hole.sh` | Host provisioning, Docker install and stack deployment |
+| `docker-compose.yml` | Pi-hole v6 container definition |
+| `.env.example` | Template for `.env` (timezone and admin password) |
+| `.gitignore` | Keeps `.env` and Pi-hole data directories out of Git |
+
+
 ## 1. Prerequisites
 
 1. Flash a microSD card with **Raspberry Pi OS Lite (64-bit)** using the [Raspberry Pi Imager](https://www.raspberrypi.com/software/).
