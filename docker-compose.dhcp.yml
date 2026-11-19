@@ -1,0 +1,16 @@
+# Opt-in overlay: makes Pi-hole the DHCP server for the network.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.dhcp.yml up -d
+#
+# install_pi-hole.sh adds this file automatically when PIHOLE_ENABLE_DHCP=true.
+# The host must have a fixed address on the LAN; a DHCP server that moves is
+# worse than no DHCP server, so the values are required rather than defaulted.
+services:
+  pihole:
+    ports:
+      - "67:67/udp"
+    environment:
+      FTLCONF_dhcp_active: "true"
+      FTLCONF_dhcp_start: ${PIHOLE_DHCP_START:?Set PIHOLE_DHCP_START in .env}
+      FTLCONF_dhcp_end: ${PIHOLE_DHCP_END:?Set PIHOLE_DHCP_END in .env}
+      FTLCONF_dhcp_router: ${PIHOLE_DHCP_ROUTER:?Set PIHOLE_DHCP_ROUTER in .env}
