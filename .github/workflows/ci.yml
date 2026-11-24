@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  shell:
+    name: shellcheck + compose validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Shell syntax
+        run: bash -n install_pi-hole.sh
+
+      - name: Shellcheck
+        run: shellcheck -x install_pi-hole.sh
+
+      - name: Compose config (base)
+        env:
+          WEBPASSWORD: ci-password-1234
+          PIHOLE_VERSION: 2026.11.0
+        run: docker compose config --quiet
+
+      - name: Compose config (DHCP overlay)
+        env:
+          WEBPASSWORD: ci-password-1234
+          PIHOLE_VERSION: 2026.11.0
+          PIHOLE_DHCP_START: 192.168.1.100
+          PIHOLE_DHCP_END: 192.168.1.200
+          PIHOLE_DHCP_ROUTER: 192.168.1.1
+        run: docker compose -f docker-compose.yml -f docker-compose.dhcp.yml config --quiet
+
+      - name: Compose must reject a missing image tag
+        run: |
+          if WEBPASSWORD=x docker compose config --quiet 2>/dev/null; then
+            echo "compose accepted a deployment without PIHOLE_VERSION"
+            exit 1
+          fi

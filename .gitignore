@@ -1,7 +1,5 @@
-# Ignore live environment variables
+# Never commit the deployment state.
 .env
-
-# Ignore Pi-hole local database and configurations
 etc-pihole/
 etc-dnsmasq.d/
-
+*.log
